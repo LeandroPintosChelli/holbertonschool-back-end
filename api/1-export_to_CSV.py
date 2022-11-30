@@ -13,19 +13,19 @@ def to_csv():
             USERNAME = (u.get('username'))
             break
 
-    task_title = []
+    TASK_STATUS_TITLE = []
     todos = requests.get("http://jsonplaceholder.typicode.com/todos").json()
     for t in todos:
         if t.get('userId') == int(argv[1]):
-            task_title.append((t.get('completed'), t.get('title')))
+            TASK_STATUS_TITLE.append((t.get('completed'), t.get('title')))
 
-    filename = "USER_ID.csv"
+    filename = "{}.csv".format(argv[1])
     with open(filename, "w") as csvfile:
         fieldnames = ["USER_ID", "USERNAME",
                       "TASK_COMPLETED_STATUS", "TASK_TITLE"]
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames,
                                 quoting=csv.QUOTE_ALL)
-        for task in task_title:
+        for task in TASK_STATUS_TITLE:
             writer.writerow({"USER_ID": argv[1], "USERNAME": USERNAME,
                              "TASK_COMPLETED_STATUS": task[0],
                              "TASK_TITLE": task[1]})
