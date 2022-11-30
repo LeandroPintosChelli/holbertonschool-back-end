@@ -3,7 +3,7 @@
     API used: https://jsonplaceholder.typicode.com/"""
 from sys import argv
 import requests
-
+import json
 
 if __name__ == '__main__':
     todo = requests.get('https://jsonplaceholder.typicode.com/todos').json()
