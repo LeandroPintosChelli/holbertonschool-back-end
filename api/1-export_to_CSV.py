@@ -1,34 +1,22 @@
 #!/usr/bin/python3
-"""Script that uses REST API"""
+'''
+export data in the CSV format
+'''
+
+import csv
 import requests
 from sys import argv
-import csv
 
-
-def to_csv():
-    """return API data"""
-    users = requests.get("http://jsonplaceholder.typicode.com/users").json()
-    for u in users:
-        if u.get('id') == int(argv[1]):
-            USERNAME = (u.get('username'))
-            break
-
-    TASK_STATUS_TITLE = []
-    todos = requests.get("http://jsonplaceholder.typicode.com/todos").json()
-    for t in todos:
-        if t.get('userId') == int(argv[1]):
-            TASK_STATUS_TITLE.append((t.get('completed'), t.get('title')))
-
-    filename = "{}.csv".format(argv[1])
-    with open(filename, "w") as csvfile:
-        fieldnames = ["USER_ID", "USERNAME",
-                      "TASK_COMPLETED_STATUS", "TASK_TITLE"]
-        writer = csv.DictWriter(csvfile, fieldnames=fieldnames,
-                                quoting=csv.QUOTE_ALL)
-        for task in TASK_STATUS_TITLE:
-            writer.writerow({"USER_ID": argv[1], "USERNAME": USERNAME,
-                             "TASK_COMPLETED_STATUS": task[0],
-                             "TASK_TITLE": task[1]})
-
-if __name__ == "__main__":
-    to_csv()
+if __name__ == '__main__':
+    uid = argv[1]
+    url = "https://jsonplaceholder.typicode.com/users/{}".format(uid)
+    user = requests.get(url, verify=False).json()
+    url = "https://jsonplaceholder.typicode.com/todos?userId={}".format(
+        uid)
+    todo = requests.get(url, verify=False).json()
+    with open("{}.csv".format(uid), 'w', newline='') as csvfile:
+        taskwriter = csv.writer(csvfile, quoting=csv.QUOTE_ALL)
+        for t in todo:
+            taskwriter.writerow([int(uid), user.get('username'),
+                                 t.get('completed'),
+                                 t.get('title')])
