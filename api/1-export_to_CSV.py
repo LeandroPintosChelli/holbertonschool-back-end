@@ -19,7 +19,7 @@ def to_csv():
         if t.get('userId') == int(argv[1]):
             task_title.append((t.get('completed'), t.get('title')))
 
-    filename = "{}.csv".format(argv[1])
+    filename = "USER_ID.csv"
     with open(filename, "w") as csvfile:
         fieldnames = ["USER_ID", "USERNAME",
                       "TASK_COMPLETED_STATUS", "TASK_TITLE"]
